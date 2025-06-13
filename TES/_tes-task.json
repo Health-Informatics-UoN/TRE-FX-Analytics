@@ -1,0 +1,32 @@
+{
+    "name": "analysis test 2.8.0",
+    "inputs": [],
+    "outputs": [
+        {
+            "url": "s3://beacon7283outputtre",
+            "path": "/outputs",
+            "type": "DIRECTORY",
+            "name": "workdir"
+        }
+    ],
+    "executors": [
+        {
+            "image": "harbor.ukserp.ac.uk/dare-trefx/control-tre-sqlpg@sha256:18a8d3b056fd573ec199523fc333c691cd4e7e90ff1c43e59be8314066e1313c",
+            
+            "command": [
+              "--Connection=Host=drs-nonprod-pgserver.postgres.database.azure.com:5432;Username=hutchuser;Password=awOIdxrb4jlILpe;Database=hutch_omop",
+              "--Output=/outputs/output.csv",
+            	"--Query=WITH user_query AS (SELECT value_as_number FROM public.measurement WHERE measurement_concept_id = 3037532 AND value_as_number IS NOT NULL) SELECT COUNT(value_as_number) AS n, SUM(value_as_number) AS total FROM user_query;"
+
+            ],
+            
+            "env": {
+                "DATASOURCE_DB_DATABASE": "hutch_omop",
+                "DATASOURCE_DB_HOST": "drs-nonprod-pgserver.postgres.database.azure.com",
+                "DATASOURCE_DB_PASSWORD": "awOIdxrb4jlILpe",
+                "DATASOURCE_DB_USERNAME": "hutchuser"
+            },
+            "workdir": "/app"
+        }
+    ]
+}
